@@ -5,7 +5,11 @@ class Premailer
         extend self
 
         def load(url)
-          path = URI(url).path
+          prefix = [
+            ::Rails.configuration.relative_url_root,
+          ].join
+          path = URI(url).path.sub(/\A#{prefix}/, '')
+
           file_path = "public#{path}"
           File.read(file_path) if File.file?(file_path)
         end
